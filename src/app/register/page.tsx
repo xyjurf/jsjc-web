@@ -10,6 +10,7 @@ export default function RegisterPage() {
   const supabase = createClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -19,6 +20,12 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
     setInfo(null);
+
+    if (password !== confirmPassword) {
+      setError("两次输入的密码不一致");
+      setLoading(false);
+      return;
+    }
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -74,6 +81,20 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-md border border-border bg-bg px-3 py-2 text-text outline-none focus:border-accent"
               placeholder="••••••••"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm text-text-muted">
+              确认密码
+            </label>
+            <input
+              type="password"
+              required
+              minLength={6}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full rounded-md border border-border bg-bg px-3 py-2 text-text outline-none focus:border-accent"
+              placeholder="再次输入密码"
             />
           </div>
           {error && (
