@@ -25,23 +25,24 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
+  // 使用 getSession 而非 getUser：getSession 读 cookie 无网络请求，速度快
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
   const path = request.nextUrl.pathname;
   const isAuthPage = path.startsWith("/login") || path.startsWith("/register");
   const isDashboard = path.startsWith("/dashboard");
 
   // 未登录访问受保护页面 → 跳转登录
-  if (!user && isDashboard) {
+  if (!session && isDashboard) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
   // 已登录访问登录/注册页 → 跳转仪表盘
-  if (user && isAuthPage) {
+  if (session && isAuthPage) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);

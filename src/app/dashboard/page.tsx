@@ -10,16 +10,20 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: subs } = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("status", "active")
-    .order("created_at", { ascending: false });
+  const [subsRes, orderRes] = await Promise.all([
+    supabase
+      .from("subscriptions")
+      .select("*")
+      .eq("status", "active")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "paid"),
+  ]);
 
-  const { count: orderCount } = await supabase
-    .from("orders")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "paid");
+  const subs = subsRes.data;
+  const orderCount = orderRes.count;
 
   const subscriptions = (subs ?? []) as Subscription[];
   const active = subscriptions[0];

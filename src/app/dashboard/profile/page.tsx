@@ -9,16 +9,20 @@ export default async function ProfilePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user!.id)
-    .maybeSingle();
+  const [profileRes, subRes] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user!.id)
+      .maybeSingle(),
+    supabase
+      .from("subscriptions")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "active"),
+  ]);
 
-  const { count: subCount } = await supabase
-    .from("subscriptions")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "active");
+  const profile = profileRes.data;
+  const subCount = subRes.count;
 
   const p = profile as Profile | null;
 
