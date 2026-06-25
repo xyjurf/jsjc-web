@@ -20,7 +20,13 @@ export default function RegisterPage() {
     setError(null);
     setInfo(null);
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    });
     if (error) {
       setError(error.message);
       setLoading(false);
