@@ -1,4 +1,12 @@
 import ComingSoon from "@/components/ComingSoon";
-export default function Page() {
-  return <ComingSoon title="节点状态" />;
+import { Server } from "lucide-react";
+
+export default function NodesPage() {
+  return (
+    <ComingSoon
+      title="我的节点"
+      icon={Server}
+      description="实时监控节点运行状态与延迟"
+    />
+  );
 }

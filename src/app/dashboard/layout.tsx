@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import Sidebar from "@/components/Sidebar";
-import Topbar from "@/components/Topbar";
+import SidebarShell from "@/components/SidebarShell";
 
 export default async function DashboardLayout({
   children,
@@ -18,12 +17,8 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Topbar email={user.email ?? "用户"} />
-        <main className="flex-1 overflow-y-auto p-8">{children}</main>
-      </div>
-    </div>
+    <SidebarShell email={user.email ?? "用户"}>
+      <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
+    </SidebarShell>
   );
 }
