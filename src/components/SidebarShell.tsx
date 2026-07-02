@@ -7,10 +7,15 @@ import ToastProvider from "./ToastProvider";
 
 interface SidebarShellProps {
   email: string;
+  role?: string | null;
   children: React.ReactNode;
 }
 
-export default function SidebarShell({ email, children }: SidebarShellProps) {
+export default function SidebarShell({
+  email,
+  role,
+  children,
+}: SidebarShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -18,7 +23,7 @@ export default function SidebarShell({ email, children }: SidebarShellProps) {
       <div className="flex h-screen overflow-hidden bg-bg">
       {/* Desktop Sidebar — always visible */}
       <div className="hidden lg:block">
-        <Sidebar />
+        <Sidebar role={role} />
       </div>
 
       {/* Mobile overlay */}
@@ -29,7 +34,7 @@ export default function SidebarShell({ email, children }: SidebarShellProps) {
             onClick={() => setSidebarOpen(false)}
           />
           <div className="absolute left-0 top-0 bottom-0">
-            <Sidebar />
+            <Sidebar role={role} />
           </div>
         </div>
       )}

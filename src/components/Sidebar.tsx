@@ -18,12 +18,23 @@ import {
   ChevronRight,
   LogOut,
   Zap,
+  PackageCheck,
+  Shield,
 } from "lucide-react";
 
-const NAV_ITEMS = [
+interface NavItem {
+  label: string;
+  href: string;
+  icon: typeof LayoutDashboard;
+  adminOnly?: boolean;
+}
+
+const NAV_ITEMS: NavItem[] = [
   { label: "概览", href: "/dashboard", icon: LayoutDashboard },
   { label: "套餐", href: "/dashboard/plans", icon: CreditCard },
   { label: "订单", href: "/dashboard/orders", icon: ShoppingBag },
+  { label: "收货管理", href: "/dashboard/receipt", icon: PackageCheck },
+  { label: "管理面板", href: "/dashboard/admin", icon: Shield, adminOnly: true },
   { label: "节点", href: "/dashboard/nodes", icon: Server },
   { label: "工单", href: "/dashboard/tickets", icon: Ticket },
   { label: "使用量", href: "/dashboard/usage", icon: BarChart3 },
@@ -32,7 +43,7 @@ const NAV_ITEMS = [
   { label: "个人中心", href: "/dashboard/profile", icon: User },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ role }: { role?: string | null }) {
   const pathname = usePathname();
   const supabase = createClient();
   const [collapsed, setCollapsed] = useState(false);
@@ -75,7 +86,14 @@ export default function Sidebar() {
       {/* Nav */}
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {NAV_ITEMS.map((item) => {
-          const active = pathname === item.href;
+          if (item.adminOnly && role !== "admin") return null;
+
+          const isParentActive =
+            item.href === "/dashboard/admin"
+              ? pathname.startsWith("/dashboard/admin")
+              : pathname === item.href;
+
+          const active = isParentActive;
           const Icon = item.icon;
           return (
             <Link

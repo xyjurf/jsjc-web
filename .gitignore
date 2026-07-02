@@ -37,3 +37,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local tools
+.nezha/
+
+# temp files
+.tmp_*
+worker/node_modules/

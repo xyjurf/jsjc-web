@@ -17,7 +17,6 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  // Check admin role
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
@@ -29,11 +28,9 @@ export default async function AdminLayout({
   }
 
   return (
-    <SidebarShell email={user.email ?? "管理员"}>
-      <div className="flex-1 overflow-y-auto p-6 md:p-8">
-        <AdminNav />
-        <main>{children}</main>
-      </div>
+    <SidebarShell email={user.email ?? "用户"} role="admin">
+      <AdminNav />
+      <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
     </SidebarShell>
   );
 }

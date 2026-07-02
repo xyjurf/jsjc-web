@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import AdminOrdersClient from "@/components/AdminOrdersClient";
-import type { Order } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -10,16 +9,16 @@ export default async function AdminOrdersPage() {
     .from("orders")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(100);
+    .limit(200);
 
   if (error) {
-    return <p className="text-red-400">加载失败：{error.message}</p>;
+    return <p className="text-red-400">加载订单失败：{error.message}</p>;
   }
 
   return (
     <div>
       <h1 className="mb-6 text-2xl font-bold tracking-tight">订单管理</h1>
-      <AdminOrdersClient orders={(data ?? []) as Order[]} />
+      <AdminOrdersClient orders={data ?? []} />
     </div>
   );
 }
