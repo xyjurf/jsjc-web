@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Menu, ChevronDown, LogOut, User, Bell } from "lucide-react";
+import { Menu, ChevronDown, LogOut, User } from "lucide-react";
+import NotificationsPopover from "@/components/NotificationsPopover";
 
 interface TopbarProps {
   email?: string;
@@ -50,10 +51,7 @@ export default function Topbar({ email = "用户", onMenuClick }: TopbarProps) {
 
       <div className="flex items-center gap-3">
         {/* 通知铃铛 */}
-        <button className="relative rounded-lg p-2 text-text-muted transition-colors duration-200 hover:bg-bg-card hover:text-text">
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-accent animate-pulse" />
-        </button>
+        <NotificationsPopover />
 
         {/* 用户下拉 */}
         <div className="relative" ref={menuRef}>

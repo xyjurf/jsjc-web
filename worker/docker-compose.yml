@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  worker:
+    build: .
+    restart: unless-stopped
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - UPSTREAM_SITE_URL=${UPSTREAM_SITE_URL:-https://xn--mes358acgm99l.com}
+      - UPSTREAM_EMAIL=${UPSTREAM_EMAIL}
+      - UPSTREAM_PASSWORD=${UPSTREAM_PASSWORD}
+      - POLL_INTERVAL_MS=${POLL_INTERVAL_MS:-5000}
+      - MAX_RETRY_ATTEMPTS=${MAX_RETRY_ATTEMPTS:-3}
+      - HEADLESS=${HEADLESS:-true}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - /tmp:/tmp
+    shm_size: "1gb"
+    security_opt:
+      - seccomp:unconfined
