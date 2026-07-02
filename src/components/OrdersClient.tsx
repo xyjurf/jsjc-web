@@ -8,22 +8,31 @@ import { Loader2, ShoppingBag } from "lucide-react";
 import StatusBadge from "@/components/StatusBadge";
 
 function statusVariant(
-  status: Order["status"]
-): "warning" | "success" | "neutral" {
+  status: string
+): "warning" | "success" | "neutral" | "info" | "active" {
   switch (status) {
     case "pending":
       return "warning";
     case "paid":
+      return "info";
+    case "fulfilling":
+      return "active";
+    case "completed":
       return "success";
+    case "cancelled":
+      return "neutral";
     default:
       return "neutral";
   }
 }
 
-const STATUS_LABEL: Record<Order["status"], string> = {
+const STATUS_LABEL: Record<string, string> = {
   pending: "待支付",
-  paid: "已支付",
+  paid: "待发货",
+  fulfilling: "已发货",
+  completed: "已完成",
   cancelled: "已取消",
+  failed: "失败",
 };
 
 export default function OrdersClient({ orders }: { orders: Order[] }) {
